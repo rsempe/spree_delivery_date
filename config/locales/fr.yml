@@ -11,3 +11,5 @@ fr:
   cannot_be_a_sunday: "ne peut pas être un dimanche"
   cannot_be_today_or_in_the_past: "ne peut pas être avant demain"
   too_late_for_delivery_tomorrow: "il est trop tard pour être livré demain"
+  start: "Départ"
+  stop: "Fin"
