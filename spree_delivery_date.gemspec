@@ -5,14 +5,14 @@ Gem::Specification.new do |s|
   s.version     = '2.4'
   s.summary     = 'Adds a delivery date field in the delivery section of checkout'
   s.description = 'Adds a delivery date field in the delivery section of the checkout. Allows admin to view that delivery date in the order details.'
-  s.required_ruby_version = '>= 1.8.7'
+  s.required_ruby_version = '>= 2.0.0'
 
   s.author    = 'Scott Ringwelski'
   s.email     = 'sgringwe@mtu.edu'
   s.homepage  = 'http://www.spreecommerce.com'
 
-  #s.files       = `git ls-files`.split("\n")
-  #s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.files       = `git ls-files`.split("\n")
+  s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_path = 'lib'
   s.requirements << 'none'
 
@@ -20,11 +20,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_frontend', '> 2.2.1'
   s.add_dependency 'spree_backend', '> 2.2.1'
 
-  s.add_development_dependency 'capybara', '~> 1.1.2'
+  s.add_development_dependency 'capybara', '~> 2.1'
   s.add_development_dependency 'coffee-rails'
-  s.add_development_dependency 'factory_girl', '~> 2.6.4'
+  s.add_development_dependency 'factory_girl', '~> 4.2'
   s.add_development_dependency 'ffaker'
-  s.add_development_dependency 'rspec-rails',  '~> 2.9'
+  s.add_development_dependency 'rspec-rails',  '~> 2.13'
   s.add_development_dependency 'sass-rails'
   s.add_development_dependency 'sqlite3'
 end
