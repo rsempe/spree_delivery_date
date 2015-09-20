@@ -2,4 +2,12 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 fr:
+  activerecord:
+    attributes:
+      spree/order:
+        delivery_date: "Date de livraison"
   delivery_date: "Merci de choisir la date de livraison :"
+  cannot_be_blank: "doit être rempli"
+  cannot_be_a_sunday: "ne peut pas être un dimanche"
+  cannot_be_today_or_in_the_past: "ne peut pas être avant demain"
+  too_late_for_delivery_tomorrow: "il est trop tard pour être livré demain"

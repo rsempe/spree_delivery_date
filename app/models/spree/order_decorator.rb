@@ -2,25 +2,56 @@ Spree::Order.class_eval do
   require 'date'
   require 'spree/order/checkout'
 
-  validate :delivery_date, :presence => true, :allow_nil => false
-  validate :delivery_date_specific_validation
+  after_initialize :set_default_delivery_date
 
-  # Ensure that a delivery date is set. We don't want to run these validations until it is
-  # Only run the delivery date validations if we are on that step or past.
-  def delivery_date_specific_validation
-    if !self.delivery_date.blank? && ['payment', 'confirm', 'complete'].include?(state)
-      cutoff = Time.zone.now.change(:hour => 16, :min => 00) # Gets 4pm in EST time zone (config.time_zone)
+  validate :delivery_date_present, :delivery_date_in_the_future, :delivery_date_specific_validation
 
-      if [0, 1, 7].include?(self.delivery_date.wday)
-        errors.add(:delivery_date, "cannot be a Sunday or Monday.")
-      end
+  def set_default_delivery_date
+    if cutoff.past?
+      self.delivery_date = is_sunday?(2.days.from_now) ? 3.days.from_now : 2.days.from_now
+    else
+      self.delivery_date = is_sunday?(1.day.from_now) ? 2.days.from_now : 1.day.from_now
+    end
+  end
 
-      if cutoff.past? && !(self.delivery_date > Date.tomorrow)
-        errors.add(:delivery_date, ": It is too late for delivery tomorrow. Please specify a date after tomorrow.")
-      elsif !cutoff.past? && !(self.delivery_date > Date.today)
-        errors.add(:delivery_date, ": It is too late for delivery today. Please specify a date tomorrow or later.")
+  def delivery_date_present
+    if !self.delivery_date
+      errors.add(:delivery_date, I18n.t(:cannot_be_blank))
+    end
+  end
+
+  def delivery_date_in_the_future
+    if self.delivery_date_changed?
+      if self.delivery_date && self.delivery_date <= Date.current
+        errors.add(:delivery_date, I18n.t(:cannot_be_today_or_in_the_past))
       end
     end
+  end
+
+  def delivery_date_specific_validation
+    if ['payment', 'confirm', 'complete'].include?(state)
+      if is_sunday?(self.delivery_date)
+        errors.add(:delivery_date, I18n.t(:cannot_be_a_sunday))
+      end
+
+      if too_late_for_delivery_tomorrow?
+        errors.add(:delivery_date, I18n.t(:too_late_for_delivery_tomorrow))
+      end
+    end
+  end
+
+  private
+
+  def too_late_for_delivery_tomorrow?
+    cutoff.past? && !(self.delivery_date > Date.tomorrow)
+  end
+
+  def cutoff
+    Time.now.change(hour: 11, min: 00)
+  end
+
+  def is_sunday?(date)
+    [0, 7].include?(date.wday)
   end
 
   Spree::PermittedAttributes.checkout_attributes << :delivery_date

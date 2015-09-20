@@ -3,3 +3,6 @@
 
 en:
   delivery_date: "Please select the deliver date :"
+  cannot_be_a_sunday: "cannot be a Sunday"
+  cannot_be_today_or_in_the_past: "cannot be today or in the past"
+  too_late_for_delivery_tomorrow: "too late for delivery tomorrow"
