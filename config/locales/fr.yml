@@ -6,7 +6,7 @@ fr:
     attributes:
       spree/order:
         delivery_date: "Date de livraison"
-  delivery_date: "Merci de choisir la date de livraison :"
+  delivery_date: "Date de livraison :"
   cannot_be_blank: "doit être rempli"
   cannot_be_a_sunday: "ne peut pas être un dimanche"
   cannot_be_today_or_in_the_past: "ne peut pas être avant demain"
