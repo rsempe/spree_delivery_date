@@ -4,7 +4,7 @@ Spree::Order.class_eval do
 
   after_initialize :set_default_delivery_date
 
-  validate :delivery_date_present, :delivery_date_in_the_future, :delivery_date_specific_validation
+  validate :delivery_date_present, :delivery_date_specific_validation
 
   def set_default_delivery_date
     if cutoff.past?
@@ -15,32 +15,28 @@ Spree::Order.class_eval do
   end
 
   def delivery_date_present
-    if !self.delivery_date
-      errors.add(:delivery_date, I18n.t(:cannot_be_blank))
-    end
-  end
-
-  def delivery_date_in_the_future
-    if self.delivery_date_changed?
-      if self.delivery_date && self.delivery_date <= Date.current
-        errors.add(:delivery_date, I18n.t(:cannot_be_today_or_in_the_past))
-      end
+    if checkout_state? && !self.delivery_date
+        errors.add(:delivery_date, I18n.t(:cannot_be_blank))
     end
   end
 
   def delivery_date_specific_validation
-    if ['payment', 'confirm', 'complete'].include?(state)
+    if checkout_state? && self.delivery_date
       if is_sunday?(self.delivery_date)
         errors.add(:delivery_date, I18n.t(:cannot_be_a_sunday))
       end
 
       if too_late_for_delivery_tomorrow?
-        errors.add(:delivery_date, I18n.t(:too_late_for_delivery_tomorrow))
+        errors.add(:delivery_date, I18n.t(:too_late_for_delivery))
       end
     end
   end
 
   private
+
+  def checkout_state?
+    ['payment', 'confirm', 'complete'].include?(state)
+  end
 
   def too_late_for_delivery_tomorrow?
     cutoff.past? && !(self.delivery_date > Date.tomorrow)

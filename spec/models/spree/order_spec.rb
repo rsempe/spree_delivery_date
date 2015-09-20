@@ -59,6 +59,8 @@ describe Spree::Order do
   end
 
   describe "#delivery_date_present" do
+    before { subject.state = "confirm" }
+
     context "whithout a delivery_date" do
       it "adds an error to delivery_date field" do
         subject.delivery_date = nil
@@ -69,28 +71,6 @@ describe Spree::Order do
 
     context "with a delivery_date" do
       it "doesn't add any error" do
-        subject.valid?
-        expect(subject.errors[:delivery_date].size).to eq(0)
-      end
-    end
-  end
-
-  describe "#delivery_date_in_the_future" do
-    before do
-      allow(Date).to receive(:current) { Date.new(2010, 1, 16) }
-    end
-
-    context "when delivery date is today" do
-      it "adds an error to delivery_date field" do
-        subject.delivery_date = Date.new(2010, 1, 16)
-        subject.valid?
-        expect(subject.errors[:delivery_date].size).to eq(1)
-      end
-    end
-
-    context "when delivery date is tomorrow" do
-      it "doesn't add any error" do
-        subject.delivery_date = Date.new(2010, 1, 17)
         subject.valid?
         expect(subject.errors[:delivery_date].size).to eq(0)
       end
@@ -111,7 +91,7 @@ describe Spree::Order do
       end
     end
 
-    context "when it's too late for delivery tomorrow" do
+    context "when it's too late for delivery" do
       it "adds an error to delivery_date field" do
         subject.delivery_date = Date.new(2010, 1, 16)
         subject.valid?
