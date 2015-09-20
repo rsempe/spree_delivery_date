@@ -35,7 +35,7 @@ Spree::Order.class_eval do
   private
 
   def checkout_state?
-    ['payment', 'confirm', 'complete'].include?(state)
+    ['payment', 'confirm'].include?(state)
   end
 
   def too_late_for_delivery_tomorrow?
