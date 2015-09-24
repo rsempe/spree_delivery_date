@@ -7,10 +7,12 @@ Spree::Order.class_eval do
   validate :delivery_date_present, :delivery_date_specific_validation
 
   def set_default_delivery_date
-    if cutoff.past?
-      self.delivery_date = is_sunday?(2.days.from_now) ? 3.days.from_now : 2.days.from_now
-    else
-      self.delivery_date = is_sunday?(1.day.from_now) ? 2.days.from_now : 1.day.from_now
+    if self.new_record?
+      if cutoff.past?
+        self.delivery_date = is_sunday?(2.days.from_now) ? 3.days.from_now : 2.days.from_now
+      else
+        self.delivery_date = is_sunday?(1.day.from_now) ? 2.days.from_now : 1.day.from_now
+      end
     end
   end
 
