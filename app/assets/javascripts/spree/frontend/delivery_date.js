@@ -7,7 +7,7 @@ function SpreeDeliveryDate() {
       minDate: 1,
       beforeShowDay: function(date) {
         var day = date.getDay();
-        return [(day != 0), ''];
+        return [(day != 0 && day != 1), ''];
       }
     });
   };
