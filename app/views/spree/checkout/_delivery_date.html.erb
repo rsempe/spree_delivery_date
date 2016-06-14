@@ -3,6 +3,6 @@
 <div id="delivery_date">
   <p class="field">
     <%= form.label :delivery_date, t(:delivery_date) %><br />
-    <%= form.text_field :delivery_date, value: (l(@order.delivery_date) rescue l(Date.current)) %>
+    <%= form.text_field :delivery_date, readonly: true, value: (l(@order.delivery_date) rescue l(Date.current)) %>
   </p>
 </div>
